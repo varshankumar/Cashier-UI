@@ -1,13 +1,11 @@
 import java.util.*;
 import java.io.*;
-import java.nio.file.Paths;
-import java.nio.file.Files;
 import java.awt.Frame;
 import java.awt.TextArea;
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
-import javax.json.JsonArray;
+import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONTokener;
+
 
 
 public class Inventory {
@@ -26,27 +24,28 @@ public class Inventory {
     }
 
     public void loadInventory() {
-        try (InputStream is = getClass().getClassLoader().getResourceAsStream("inventory.json");
-             JsonReader reader = Json.createReader(is)) {
-
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream("inventory.json")) {
             if (is == null) {
                 throw new FileNotFoundException("Resource not found: inventory.json");
             }
 
-            JsonObject json = reader.readObject();
+            // Parse JSON using org.json
+            JSONTokener tokener = new JSONTokener(is);
+            JSONObject json = new JSONObject(tokener);
 
-            JsonObject storeInfo = json.getJsonObject("store_info");
+            JSONObject storeInfo = json.getJSONObject("store_info");
             storeName = storeInfo.getString("store_name");
             phoneNumber = storeInfo.getString("phone_number");
             city = storeInfo.getString("city");
             state = storeInfo.getString("state");
-            cityTax = storeInfo.getJsonNumber("city_tax").doubleValue();
+            cityTax = storeInfo.getDouble("city_tax");
 
-            JsonArray productArray = json.getJsonArray("product_info");
-            for (JsonObject prod : productArray.getValuesAs(JsonObject.class)) {
+            JSONArray productArray = json.getJSONArray("product_info");
+            for (int i = 0; i < productArray.length(); i++) {
+                JSONObject prod = productArray.getJSONObject(i);
                 String code = prod.getString("product_code");
                 String name = prod.getString("product_name");
-                double price = prod.getJsonNumber("price").doubleValue();
+                double price = prod.getDouble("price");
                 String description = prod.getString("description");
 
                 products.put(code, new Product(code, name, price, description));
@@ -55,6 +54,7 @@ public class Inventory {
             e.printStackTrace();
         }
     }
+
 
     public void showProducts(String partialCode) {
         StringBuilder sb = new StringBuilder();
