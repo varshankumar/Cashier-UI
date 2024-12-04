@@ -1,4 +1,10 @@
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Frame;
+import java.awt.Panel;
+import java.awt.TextArea;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -46,7 +52,25 @@ public class ReceiptGenerator {
 
         Frame receiptFrame = new Frame("Receipt");
         TextArea textArea = new TextArea(receipt.toString(), 25, 50);
-        receiptFrame.add(textArea);
+        textArea.setEditable(false);
+        
+        // Add window closing handler
+        receiptFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                receiptFrame.dispose();
+            }
+        });
+        
+        // Add close button
+        Button closeButton = new Button("Close");
+        closeButton.addActionListener(e -> receiptFrame.dispose());
+        
+        Panel buttonPanel = new Panel();
+        buttonPanel.add(closeButton);
+        
+        receiptFrame.setLayout(new BorderLayout());
+        receiptFrame.add(textArea, BorderLayout.CENTER);
+        receiptFrame.add(buttonPanel, BorderLayout.SOUTH);
         receiptFrame.setSize(600, 700);
         receiptFrame.setVisible(true);
     }

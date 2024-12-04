@@ -2,6 +2,8 @@ import java.util.*;
 import java.io.*;
 import java.awt.Frame;
 import java.awt.TextArea;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONTokener;
@@ -16,6 +18,7 @@ public class Inventory {
     private String city;
     private String state;
     private double cityTax;
+    private ProductListFrame productListFrame;
 
     private Inventory() {}
 
@@ -57,18 +60,28 @@ public class Inventory {
 
 
     public void showProducts(String partialCode) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("%-10s %-20s %-20s\n", "Code", "Name", "Description"));
-        sb.append("------------------------------------------------------------\n");
+        if (productListFrame != null) {
+            productListFrame.dispose();
+        }
+        
+        productListFrame = new ProductListFrame();
+        
+        StringBuilder productList = new StringBuilder();
+        productList.append(String.format("%-10s %-20s %-20s\n", "Code", "Name", "Description"));
+        productList.append("------------------------------------------------------------\n");
         for (Product product : products.values()) {
             if (product.getCode().startsWith(partialCode)) {
-                sb.append(String.format("%-10s %-20s %-20s\n", product.getCode(), product.getName(), product.getDescription()));
+                productList.append(String.format("%-10s %-20s %-20s\n", product.getCode(), product.getName(), product.getDescription()));
             }
         }
-        Frame productListFrame = new Frame("Product List");
-        TextArea textArea = new TextArea(sb.toString(), 20, 50);
-        productListFrame.add(textArea);
-        productListFrame.setSize(600, 400);
+        
+        productListFrame.setProducts(productList.toString());
+        productListFrame.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                productListFrame.dispose();
+                productListFrame = null;
+            }
+        });
         productListFrame.setVisible(true);
     }
 

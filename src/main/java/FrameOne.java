@@ -103,6 +103,7 @@ public class FrameOne extends Panel {
         loadInventoryButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 inventory.loadInventory();
+                FrameTwo.getInstance().updateTaxInfo(); // Add this line
                 showMessage("Inventory loaded successfully.");
             }
         });

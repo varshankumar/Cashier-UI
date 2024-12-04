@@ -27,8 +27,10 @@ public class FrameTwo extends Panel {
         totalsPanelContainer.add(totalsPanelTitle, BorderLayout.NORTH);
         totalsPanelContainer.add(totalsPanel, BorderLayout.CENTER);
 
-        taxField = new TextField(10);
+        taxField = new TextField(20);
         taxField.setEditable(false);
+        taxField.setText("0.0%"); // Default value until inventory is loaded
+
         discountField = new TextField(10);
         subtotalField = new TextField(10);
         subtotalField.setEditable(false);
@@ -41,8 +43,7 @@ public class FrameTwo extends Panel {
         applyDiscountCheckbox = new Checkbox("Apply Discount");
         printReceiptButton = new Button("Print Receipt");
 
-        totalsPanel.add(new Label("City Tax (%):"));
-        taxField.setText(String.valueOf(Inventory.getInstance().getCityTax()));
+        totalsPanel.add(new Label("City Tax:"));
         totalsPanel.add(taxField);
         totalsPanel.add(new Label("Discount (%):"));
         totalsPanel.add(discountField);
@@ -83,11 +84,21 @@ public class FrameTwo extends Panel {
         updateTotals();
     }
 
+    // Add new method to update tax info
+    public void updateTaxInfo() {
+        Inventory inv = Inventory.getInstance();
+        String taxInfo = String.format("%.1f%% (%s, %s)", 
+            inv.getCityTax(),
+            inv.getCity(),
+            inv.getState());
+        taxField.setText(taxInfo);
+    }
+
     private void updateTotals() {
         double subtotal = Invoice.getInstance().calculateSubtotal();
         subtotalField.setText(String.format("%.2f", subtotal));
 
-        double taxPercent = Double.parseDouble(taxField.getText());
+        double taxPercent = Inventory.getInstance().getCityTax(); // Use tax from Inventory
         double taxAmount = subtotal * (taxPercent / 100);
         double totalWithTax = subtotal + taxAmount;
         totalField.setText(String.format("%.2f", totalWithTax));
