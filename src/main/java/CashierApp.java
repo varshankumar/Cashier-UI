@@ -11,12 +11,18 @@ public class CashierApp extends Frame {
         setSize(800, 600);
         setLayout(new GridLayout(1, 2));
 
-        add(new FrameOne());
-        add(FrameTwo.getInstance());
+        FrameOne frameOne = new FrameOne();
+        FrameTwo frameTwo = FrameTwo.getInstance();
+        
+        add(frameOne);
+        add(frameTwo);
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
+                frameOne.dispose();
+                frameTwo.dispose();
                 dispose();
+                System.exit(0);
             }
         });
 

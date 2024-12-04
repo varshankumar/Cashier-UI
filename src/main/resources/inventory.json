@@ -1,0 +1,95 @@
+{
+  "store_info": {
+    "store_name": "BestMart",
+    "phone_number": "555-123-4567",
+    "city": "San Jose",
+    "state": "CA",
+    "city_tax": 8.25
+  },
+  "product_info": [
+    {
+      "product_code": "01145",
+      "product_name": "Wireless Mouse",
+      "price": 25.99,
+      "description": "Ergonomic mouse"
+    },
+    {
+      "product_code": "01151",
+      "product_name": "USB Keyboard",
+      "price": 19.99,
+      "description": "Standard keyboard"
+    },
+    {
+      "product_code": "01102",
+      "product_name": "HDMI Cable",
+      "price": 9.99,
+      "description": "6ft cable"
+    },
+    {
+      "product_code": "00123",
+      "product_name": "Laptop Stand",
+      "price": 34.99,
+      "description": "Adjustable stand"
+    },
+    {
+      "product_code": "00234",
+      "product_name": "Webcam",
+      "price": 49.99,
+      "description": "1080p HD webcam"
+    },
+    {
+      "product_code": "00345",
+      "product_name": "External HDD",
+      "price": 79.99,
+      "description": "1TB storage"
+    },
+    {
+      "product_code": "00456",
+      "product_name": "USB-C Adapter",
+      "price": 15.99,
+      "description": "Multiport adapter"
+    },
+    {
+      "product_code": "00567",
+      "product_name": "Bluetooth Speaker",
+      "price": 29.99,
+      "description": "Portable speaker"
+    },
+    {
+      "product_code": "00678",
+      "product_name": "Wireless Charger",
+      "price": 22.99,
+      "description": "Fast charging"
+    },
+    {
+      "product_code": "00789",
+      "product_name": "Smartphone Case",
+      "price": 12.99,
+      "description": "Protective case"
+    },
+    {
+      "product_code": "00890",
+      "product_name": "Noise Cancelling Headphones",
+      "price": 89.99,
+      "description": "Over-ear headphones"
+    },
+    {
+      "product_code": "00901",
+      "product_name": "Fitness Tracker",
+      "price": 59.99,
+      "description": "Activity tracker"
+    },
+    {
+      "product_code": "00124",
+      "product_name": "USB Flash Drive",
+      "price": 14.99,
+      "description": "64GB storage"
+    },
+    {
+      "product_code": "00125",
+      "product_name": "Laptop Sleeve",
+      "price": 17.99,
+      "description": "13-inch sleeve"
+    }
+  ]
+}
