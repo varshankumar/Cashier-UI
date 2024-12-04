@@ -1,5 +1,7 @@
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class CashierApp extends Frame {
     public static void main(String[] args) {
@@ -11,18 +13,12 @@ public class CashierApp extends Frame {
         setSize(800, 600);
         setLayout(new GridLayout(1, 2));
 
-        FrameOne frameOne = new FrameOne();
-        FrameTwo frameTwo = FrameTwo.getInstance();
-        
-        add(frameOne);
-        add(frameTwo);
+        add(new FrameOne());
+        add(FrameTwo.getInstance());
 
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
-                frameOne.dispose();
-                frameTwo.dispose();
                 dispose();
-                System.exit(0);
             }
         });
 
