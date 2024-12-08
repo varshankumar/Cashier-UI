@@ -4,6 +4,11 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class CashierApp extends Frame {
+    /*
+     * To run the program, go to root directory of the project and then run:
+     * mvn compile
+     * mvn exec:java
+     */
     public static void main(String[] args) {
         new CashierApp();
     }
