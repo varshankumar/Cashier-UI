@@ -1,5 +1,15 @@
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Checkbox;
+import java.awt.GridLayout;
+import java.awt.Label;
+import java.awt.Panel;
+import java.awt.TextArea;
+import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public class FrameTwo extends Panel {
     private static FrameTwo instance = new FrameTwo();
@@ -7,9 +17,13 @@ public class FrameTwo extends Panel {
     TextField taxField, discountField, subtotalField, totalField, discountTotalField, grandTotalField;
     Checkbox applyDiscountCheckbox;
     private Button printReceiptButton;
+    private Invoice currentInvoice;
 
     private FrameTwo() {
+        currentInvoice = Invoice.getInstance();
         setLayout(new BorderLayout());
+
+        add(new SearchPanel(this), BorderLayout.NORTH);
 
         Panel invoicePanelContainer = new Panel(new BorderLayout());
         Panel invoicePanel = new Panel(new BorderLayout());
@@ -29,7 +43,7 @@ public class FrameTwo extends Panel {
 
         taxField = new TextField(20);
         taxField.setEditable(false);
-        taxField.setText("0.0%"); // Default value until inventory is loaded
+        taxField.setText("0.0%");
 
         discountField = new TextField(10);
         subtotalField = new TextField(10);
@@ -80,11 +94,10 @@ public class FrameTwo extends Panel {
     }
 
     public void updateInvoiceDisplay() {
-        invoiceDisplay.setText(Invoice.getInstance().getInvoiceDetails());
+        invoiceDisplay.setText(currentInvoice.getInvoiceDetails());
         updateTotals();
     }
 
-    // Add new method to update tax info
     public void updateTaxInfo() {
         Inventory inv = Inventory.getInstance();
         String taxInfo = String.format("%.1f%% (%s, %s)", 
@@ -94,11 +107,20 @@ public class FrameTwo extends Panel {
         taxField.setText(taxInfo);
     }
 
+    public void addItemToInvoice(String itemString) {
+        String code = itemString.substring(1, itemString.indexOf("]"));
+        Product product = Inventory.getInstance().getProduct(code);
+        if (product != null) {
+            currentInvoice.addItem(product, 1);
+            updateInvoiceDisplay();
+        }
+    }
+
     private void updateTotals() {
-        double subtotal = Invoice.getInstance().calculateSubtotal();
+        double subtotal = currentInvoice.calculateSubtotal();
         subtotalField.setText(String.format("%.2f", subtotal));
 
-        double taxPercent = Inventory.getInstance().getCityTax(); // Use tax from Inventory
+        double taxPercent = Inventory.getInstance().getCityTax();
         double taxAmount = subtotal * (taxPercent / 100);
         double totalWithTax = subtotal + taxAmount;
         totalField.setText(String.format("%.2f", totalWithTax));

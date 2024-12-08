@@ -27,7 +27,6 @@ public class ProductListFrame extends Frame {
         buttonPanel.add(closeButton);
         add(buttonPanel, BorderLayout.SOUTH);
         
-        // Add window closing handler
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 dispose();

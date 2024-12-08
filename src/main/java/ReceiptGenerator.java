@@ -54,14 +54,12 @@ public class ReceiptGenerator {
         TextArea textArea = new TextArea(receipt.toString(), 25, 50);
         textArea.setEditable(false);
         
-        // Add window closing handler
         receiptFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
                 receiptFrame.dispose();
             }
         });
         
-        // Add close button
         Button closeButton = new Button("Close");
         closeButton.addActionListener(e -> receiptFrame.dispose());
         

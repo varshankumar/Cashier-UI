@@ -30,7 +30,6 @@ public class FrameOne extends Panel {
         panel3Container.add(panel3Title, BorderLayout.NORTH);
         panel3Container.add(panel3, BorderLayout.CENTER);
 
-        // Panel 1 setup
         firstNameField = new TextField(10);
         lastNameField = new TextField(10);
         shiftStartField = new TextField(20);
@@ -51,14 +50,12 @@ public class FrameOne extends Panel {
         panel1.add(new Label("Shift End Time:"));
         panel1.add(shiftEndField);
 
-        // Panel 2 setup
         loadInventoryButton = new Button("Load Inventory");
         showProductsButton = new Button("Show Product List");
 
         panel2.add(loadInventoryButton);
         panel2.add(showProductsButton);
 
-        // Panel 3 setup
         productCodeField = new TextField(10);
         quantityField = new TextField(5);
         addButton = new Button("Add");
@@ -71,7 +68,6 @@ public class FrameOne extends Panel {
         panel3.add(addButton);
         panel3.add(removeButton);
 
-        // Add panels to FrameOne
         add(panel1Container);
         add(panel2Container);
         add(panel3Container);
@@ -95,7 +91,7 @@ public class FrameOne extends Panel {
             public void actionPerformed(ActionEvent e) {
                 CashierSession.getInstance().endShift();
                 shiftEndField.setText(CashierSession.getInstance().getShiftEndTime());
-                Invoice.getInstance().clearInvoice();
+                Invoice.getInstance().clear();
                 FrameTwo.getInstance().updateInvoiceDisplay();
             }
         });
@@ -103,7 +99,7 @@ public class FrameOne extends Panel {
         loadInventoryButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 inventory.loadInventory();
-                FrameTwo.getInstance().updateTaxInfo(); // Add this line
+                FrameTwo.getInstance().updateTaxInfo();
                 showMessage("Inventory loaded successfully.");
             }
         });
@@ -128,7 +124,7 @@ public class FrameOne extends Panel {
                     int quantity = Integer.parseInt(qtyStr);
                     Product product = inventory.getProduct(code);
                     if (product != null) {
-                        Invoice.getInstance().addItem(new InvoiceItem(product, quantity));
+                        Invoice.getInstance().addItem(product, quantity);
                         FrameTwo.getInstance().updateInvoiceDisplay();
                     } else {
                         showMessage("The product code entered does not exist.");
@@ -139,18 +135,27 @@ public class FrameOne extends Panel {
             }
         });
 
-        removeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String lineStr = productCodeField.getText().trim();
+        removeButton.addActionListener(e -> handleRemove());
+    }
+
+    private void handleRemove() {
+        String code = productCodeField.getText().trim();
+        if (!code.isEmpty()) {
+            if (quantityField.getText().trim().isEmpty()) {
+                Invoice.getInstance().removeItem(code);
+            } else {
                 try {
-                    int lineNumber = Integer.parseInt(lineStr);
-                    Invoice.getInstance().removeItem(lineNumber - 1);
-                    FrameTwo.getInstance().updateInvoiceDisplay();
-                } catch (NumberFormatException ex) {
-                    showMessage("Please enter a valid line number.");
+                    int qty = Integer.parseInt(quantityField.getText().trim());
+                    for (int i = 0; i < qty; i++) {
+                        Invoice.getInstance().decreaseQuantity(code);
+                    }
+                } catch (NumberFormatException e) {
                 }
             }
-        });
+            productCodeField.setText("");
+            quantityField.setText("");
+            FrameTwo.getInstance().updateInvoiceDisplay();
+        }
     }
 
     private void showMessage(String message) {

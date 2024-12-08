@@ -1,11 +1,13 @@
-import java.util.*;
-import java.io.*;
-import java.awt.Frame;
-import java.awt.TextArea;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import org.json.JSONObject;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.json.JSONTokener;
 
 
@@ -32,7 +34,6 @@ public class Inventory {
                 throw new FileNotFoundException("Resource not found: inventory.json");
             }
 
-            // Parse JSON using org.json
             JSONTokener tokener = new JSONTokener(is);
             JSONObject json = new JSONObject(tokener);
 
@@ -58,6 +59,16 @@ public class Inventory {
         }
     }
 
+    public Product findProductByName(String name) {
+        return products.values().stream()
+                .filter(p -> p.getName().equals(name))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Collection<Product> getProducts() {
+        return products.values();
+    }
 
     public void showProducts(String partialCode) {
         if (productListFrame != null) {
